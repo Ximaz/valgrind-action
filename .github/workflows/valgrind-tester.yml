@@ -1,0 +1,19 @@
+name: Valgrind Tester
+
+on:
+    - push
+
+jobs:
+    test_invalid_free:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: "Checkout"
+                uses: actions/checkout@v4.1.4
+
+            -   name: "Compile test"
+                run: "gcc tests/test_invalid_free.c -o test_invalid_free"
+
+            -   name: "Valgrind"
+                uses: ./
+                with:
+                    binary_path: "./test_invalid_free"
