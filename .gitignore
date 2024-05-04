@@ -1,0 +1,4 @@
+.env
+valgrind-reports.log
+test
+tests

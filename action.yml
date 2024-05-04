@@ -1,0 +1,34 @@
+name: "Valgrind"
+description: "Check for memory leaks, poorly managed or even not managed memory, and unclosed file descriptors."
+branding:
+  icon: "archive"
+  color: "blue"
+inputs:
+  binary_args:
+    description: "The args to pass to the binary once started (string format)"
+    required: false
+  binary_path:
+    description: "The binary to run Valgrind over"
+    required: true
+  ld_library_path:
+    description: "Custom library path (for dymanic locally-compiled libraries)"
+    required: false
+  track_file_descriptors:
+    description: "Whether or not to track file descriptors (true or false)"
+    required: false
+    default: true
+  treat_error_as_warning:
+    description: "The workflow won't exit as error, and error annotations will be replaced by warnings"
+    required: false
+    default: false
+  valgrind_suppressions:
+    description: "String containing Valgrind suppressions (will be put inside a suppressions file)"
+    required: false
+  verbose:
+    description: "Asking Valgrind to be verbose"
+    required: false
+    default: false
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
