@@ -8,4 +8,4 @@ WORKDIR /root/
 
 COPY valgrind.sh /root/valgrind.sh
 
-ENTRYPOINT ["./valgrind.sh"]
+ENTRYPOINT [ "/root/valgrind.sh" ]
