@@ -1,4 +1,4 @@
-name: "Valgrind"
+name: "Valgrind Checker"
 description: "Check for memory leaks, poorly managed or even not managed memory, and unclosed file descriptors."
 branding:
   icon: "archive"
