@@ -4,17 +4,53 @@ on:
     - push
 
 jobs:
-    test_invalid_free:
+    run_tests:
         runs-on: ubuntu-latest
         steps:
             -   name: "Checkout"
                 uses: actions/checkout@v4.1.4
 
-            -   name: "Compile test"
-                run: "gcc tests/test_invalid_free.c -o test_invalid_free"
+            -   name: "Compile tests"
+                run: |
+                    gcc -g tests/test_invalid_free.c -o test_invalid_free
+                    gcc -g tests/test_invalid_read.c -o test_invalid_read
+                    gcc -g tests/test_invalid_write.c -o test_invalid_write
+                    gcc -g tests/test_no_free.c -o test_no_free
+                    gcc -g tests/test_realloc_zero.c -o test_realloc_zero
+                    gcc -g tests/test_unclosed_file_descriptor.c -o test_unclosed_file_descriptor
 
-            -   name: "Valgrind"
+            -   name: "Valgrind test_invalid_free"
                 uses: ./
                 with:
                     binary_path: "./test_invalid_free"
+                    treat_error_as_warning: true
+
+            -   name: "Valgrind test_invalid_read"
+                uses: ./
+                with:
+                    binary_path: "./test_invalid_read"
+                    treat_error_as_warning: true
+
+            -   name: "Valgrind test_invalid_write"
+                uses: ./
+                with:
+                    binary_path: "./test_invalid_write"
+                    treat_error_as_warning: true
+
+            -   name: "Valgrind test_no_free"
+                uses: ./
+                with:
+                    binary_path: "./test_no_free"
+                    treat_error_as_warning: true
+
+            -   name: "Valgrind test_realloc_zero"
+                uses: ./
+                with:
+                    binary_path: "./test_realloc_zero"
+                    treat_error_as_warning: true
+
+            -   name: "Valgrind test_unclosed_file_descriptor"
+                uses: ./
+                with:
+                    binary_path: "./test_unclosed_file_descriptor"
                     treat_error_as_warning: true
