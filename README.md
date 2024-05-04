@@ -23,7 +23,7 @@ jobs:
                 run: gcc -g src/*.c -o program
 
             -   name: "Valgrind Checks"
-                uses: Ximaz/valgrind-action
+                uses: Ximaz/valgrind-action@v1.1.1
                 with:
                     binary_path: "./program"
                     binary_args: "--arg1 value1 --arg2 value2"
