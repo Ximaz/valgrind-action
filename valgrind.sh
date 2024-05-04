@@ -83,7 +83,7 @@ parse_valgrind_reports() {
             error="${line}"
         fi
     done < "${VALGRIND_REPORTS}"
-    rm -f "${VALGRIND_REPORTS}
+    rm -f "${VALGRIND_REPORTS}"
     if [[ "${kind}" == "warning" ]]; then
         exit 0
     fi
