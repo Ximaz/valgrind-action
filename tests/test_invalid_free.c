@@ -2,8 +2,9 @@
 
 int main(void)
 {
-    int var = 0;
+    int *var = malloc(1);
 
-    free(&var);
+    free(var);
+    free(var);
     return 0;
 }

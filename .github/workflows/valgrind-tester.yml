@@ -17,3 +17,4 @@ jobs:
                 uses: ./
                 with:
                     binary_path: "./test_invalid_free"
+                    treat_error_as_warning: true
