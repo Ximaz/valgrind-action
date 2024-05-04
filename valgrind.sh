@@ -52,7 +52,7 @@ parse_valgrind_reports() {
     while IFS= read -r line; do
         if [[ "${error}" != "" ]]; then
             if [[ $(echo "${line}" | grep '^==.*== $') && $(skip_criterion_pipe_leaks "${error}") == "1" ]]; then
-                echo "::${kind} title=Valgrind Report::${error}" >> annotations
+                echo "::${kind} title=Valgrind Report::${error}"
                 error=""
                 status=1
             else

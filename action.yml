@@ -30,8 +30,5 @@ inputs:
     default: false
 
 runs:
-  using: "composite"
-  steps:
-    - name: "Run Valgrind checker"
-        run: valgrind.sh
-        shell: bash
+  using: "docker"
+  image: "Dockerfile"
