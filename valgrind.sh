@@ -4,7 +4,6 @@
 prepare_valgrind_flags() {
     local SUPPRESSIONS_FILE="valgrind.supp"
 
-    echo "--show-error-list=yes"
     echo "--leak-check=full"
     echo "--track-origins=yes"
     echo "--read-var-info=yes"
@@ -42,6 +41,7 @@ skip_criterion_pipe_leaks() {
 
 parse_valgrind_reports() {
     local VALGRIND_REPORTS="${1}"
+    local report_id=1
     local status=0
     local error=""
     local kind="error"
@@ -52,7 +52,8 @@ parse_valgrind_reports() {
     while IFS= read -r line; do
         if [[ "${error}" != "" ]]; then
             if [[ $(echo "${line}" | grep '^==.*== $') && $(skip_criterion_pipe_leaks "${error}") == "1" ]]; then
-                echo "::${kind} title=Valgrind Report::${error}"
+                echo "::${kind} title=Valgrind Report ${report_id}::${error}"
+                report_id=$(( $report_id + 1 ))
                 error=""
                 status=1
             else
