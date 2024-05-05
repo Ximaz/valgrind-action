@@ -1,6 +1,6 @@
 # Valgrind Checker Action
 
-A GitHub Action for checking your memory management using Valgrind.
+A GitHub Action for checking your memory management using [Valgrind](https://valgrind.org).
 
 This Action will check for :
 - un`free`'d memory,
@@ -13,43 +13,83 @@ This Action will check for :
 - memory allocation with a size of `0`,
 - invalid alignment values.
 
+If you want to have more details about the errors this Action supports, you can
+check the [`4.2. Explanation of error messages from Memcheck`](https://valgrind.org/docs/manual/mc-manual.html) section.
+
 # Usage
 
-Here is how you may use the action :
-
 ```yml
-name: Valgrind Tester
+-   uses: Ximaz/valgrind-action@v1.2.0
+    with:
+        # Either absolute or reative path to the binary you want to check the
+        # memory on.
+        binary_path: ""
 
-on:
-    - push
+        # A string containing all the arguments to pass the the binary when it
+        # gets checked by Valgrind.
+        #
+        # Default: ""
+        binary_args: ""
 
-jobs:
-    check-memory-leaks:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: "Checkout"
-                uses: actions/checkout@v4.1.4
+        # The value of the `LD_LIBRARY_PATH` environment variable so that the
+        # binary can be executed with your custom libraries, if any.
+        #
+        # Default: ""
+        ld_library_path: ""
 
-            -   name: "Compile program"
-                run: gcc -g src/*.c -o program
+        # Redzone size used by Valgrind. It represents the blocks that Valgrind
+        # will check before, and after any allocated pointer so that it will
+        # look if you're trying to operate on those bytes, which you are not
+        # supposed to.
+        #
+        # Default: 16
+        redzone_size: 16
 
-            -   name: "Valgrind Checks"
-                uses: Ximaz/valgrind-action@v1.1.1
-                with:
-                    binary_path: "./program"
-                    binary_args: "--arg1 value1 --arg2 value2"
+        # Whether or not to track unclosed file descriptors.
+        # Default: true
+        track_file_descriptors: true
+
+        # Whether or not to treat error as warning. This implies that, if set
+        # to true, then the action will not exit with an error status, even if
+        # Valgrind found issues during the binary execution. Also, this implies
+        # that in your workflow summary, you will see warning annotations
+        # instead of error ones.
+        #
+        # Default: false
+        treat_error_as_warning: false
+
+        # Valgrind suppressions. If specified, the content will be written into
+        # a local file which will be passed to Valgrind. It represents a set of
+        # specific checks to avoid. For instance, you can avoid checks for a
+        # specific function, inside a specific program or library, etc...
+        # Foe more detail, you can check the `2.5. Suppressing errors` section
+        # on the Valgrind's documentation :
+        # https://valgrind.org/docs/manual/manual-core.html
+        #
+        # For each found error by Valgrind, a generated suppression will be
+        # logged inside your workflow's logs. That way, you will be able to see
+        # if any dependency, unrelated to your implementation, is faulty for
+        # not free'ing it's own memory or file descriptors.
+        #
+        # Generally, you want to avoid using this because you may tend to use
+        # it badly in order to suppress errors about your own implemnetations,
+        # so be careful.
+        #
+        # Default: ""
+        #
+        # The example below showcases how to avoid checking for the `free`
+        # function, inside the `main` function.
+        valgrind_suppressions: |
+            {
+                DontCheckFreeInMain
+                Memcheck:Free
+                fun:free
+                fun:main
+            }
+
+        # Whether or not Valgrind should be verbose. It may be useful in case
+        # you want to debug things.
+        #
+        # Default: false
+        verbose: false
 ```
-
-# Customization
-
-`binary_args`: The args to pass to the binary when checked (string format)
-
-`ld_library_path`: Custom library path (for dymanic locally-compiled libraries)
-
-`track_file_descriptors`: Whether or not to track file descriptors (default: `true`)
-
-`treat_error_as_warning`: The workflow won't exit as error, and error annotations will be replaced by warnings (default: `false`)
-
-`valgrind_suppressions`: String containing Valgrind suppressions (will be put inside a suppressions file)
-
-`verbose`: Asking Valgrind to be verbose (default: `false`)
