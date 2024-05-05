@@ -74,21 +74,19 @@ parse_valgrind_reports() {
         done
     done < "${VALGRIND_REPORTS}"
     rm -f "${VALGRIND_REPORTS}"
-    [[ "${kind}" == "warning" ]] && echo "0" || echo "${status}"
+    [[ "${kind}" == "warning" ]] && return 0 || return $status
 }
 
 main() {
     local VALGRIND_REPORTS="valgrind-reports.log"
     local VALGRIND_FLAGS=$(prepare_valgrind_flags)
-    local status=0
 
     if [[ "${INPUT_LD_LIBRARY_PATH}" != "" ]]; then
         export LD_LIBRARY_PATH="${INPUT_LD_LIBRARY_PATH}"
     fi
     valgrind $VALGRIND_FLAGS "${INPUT_BINARY_PATH}" $INPUT_BINARY_ARGS 2>"${VALGRIND_REPORTS}"
-    status=$(parse_valgrind_reports "${VALGRIND_REPORTS}")
-    echo "Exit status: ${status}"
-    exit "${status}"
+    parse_valgrind_reports "${VALGRIND_REPORTS}"
+    exit "${?}"
 }
 
 main
