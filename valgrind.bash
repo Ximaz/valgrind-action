@@ -81,9 +81,10 @@ main() {
     local VALGRIND_REPORTS="valgrind-reports.log"
     local VALGRIND_FLAGS=$(prepare_valgrind_flags)
 
-    if [[ "${INPUT_LD_LIBRARY_PATH}" == "" ]]; then
+    if [[ "${INPUT_LD_LIBRARY_PATH}" != "" ]]; then
         export LD_LIBRARY_PATH="${INPUT_LD_LIBRARY_PATH}"
     fi
+    echo $(ls)
     valgrind $VALGRIND_FLAGS "${INPUT_BINARY_PATH}" $INPUT_BINARY_ARGS 2>"${VALGRIND_REPORTS}"
     parse_valgrind_reports "${VALGRIND_REPORTS}"
 }
