@@ -1,6 +1,17 @@
 # Valgrind Checker Action
 
-A GitHub action allowing you to check for memory leaks on your binaries, libraries and unit tests.
+A GitHub Action for checking your memory management using Valgrind.
+
+This Action will check for :
+- un`free`'d memory,
+- invalid `read` or `write` operations,
+- un`close`'d file descriptors (files and sockets),
+- invalid usage of `free`, `delete`, `delete []` or `realloc`,
+- uninitialised `syscall` params,
+- overlaps between sources and destinations for `memcpy`, `memmove`, etc...,
+- `fishy` arguments (possibly negative values) for `unsigned` expected,
+- memory allocation with a size of `0`,
+- invalid alignment values.
 
 # Usage
 
