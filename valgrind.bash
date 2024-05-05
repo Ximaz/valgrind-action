@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -xeu
+set -xu
 
 prepare_valgrind_flags() {
     local SUPPRESSIONS_FILE="valgrind.supp"
@@ -56,6 +56,7 @@ parse_valgrind_reports() {
         kind="warning"
     fi
     while IFS= read -r line; do
+        echo "Parsing line: \"${line}\"
         if [[ "${error}" != "" ]]; then
             if [[ $(echo "${line}" | grep '^==.*== $') && $(skip_criterion_pipe_leaks "${error}") == "1" ]]; then
                 echo "::${kind} title=Valgrind Report '${INPUT_BINARY_PATH}' (${report_id})::${error}"
@@ -84,8 +85,9 @@ main() {
     if [[ "${INPUT_LD_LIBRARY_PATH}" != "" ]]; then
         export LD_LIBRARY_PATH="${INPUT_LD_LIBRARY_PATH}"
     fi
-    echo $(ls)
+    echo "Starting Valgrind"
     valgrind $VALGRIND_FLAGS "${INPUT_BINARY_PATH}" $INPUT_BINARY_ARGS 2>"${VALGRIND_REPORTS}"
+    echo "Parsing report"
     parse_valgrind_reports "${VALGRIND_REPORTS}"
 }
 
