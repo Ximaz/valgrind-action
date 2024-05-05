@@ -56,7 +56,7 @@ parse_valgrind_reports() {
         kind="warning"
     fi
     while IFS= read -r line; do
-        echo "Parsing line: \"${line}\"
+        echo "Parsing line: \"${line}\""
         if [[ "${error}" != "" ]]; then
             if [[ $(echo "${line}" | grep '^==.*== $') && $(skip_criterion_pipe_leaks "${error}") == "1" ]]; then
                 echo "::${kind} title=Valgrind Report '${INPUT_BINARY_PATH}' (${report_id})::${error}"
