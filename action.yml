@@ -13,6 +13,10 @@ inputs:
   ld_library_path:
     description: "Custom library path (for dymanic locally-compiled libraries)"
     required: false
+  redzone_size:
+    description: "Valgrind's padding blocks protection (redzone) in bytes"
+    required: false
+    default: 16
   track_file_descriptors:
     description: "Whether or not to track file descriptors (true or false)"
     required: false
