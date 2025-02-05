@@ -32,6 +32,10 @@ inputs:
     description: "Asking Valgrind to be verbose"
     required: false
     default: false
+  timeout:
+    description: "Limit running time of the binary"
+    required: false
+    default: 0
 
 runs:
   using: "docker"
