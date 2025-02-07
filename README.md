@@ -92,4 +92,19 @@ check the [`4.2. Explanation of error messages from Memcheck`](https://valgrind.
         #
         # Default: false
         verbose: false
+
+        # Limit the amount of time Valgrind runs before stopping the binary,
+        # specified in floating point with an optional suffix. A duration of 0
+        # disables the timeout.
+        #
+        # This can be useful to test or bound a long-running process.
+        #
+        # Optional suffix:
+        # - 's' for seconds (the default)
+        # - 'm' for minutes
+        # - 'h' for hours
+        # - 'd' for days
+        #
+        # Default: 0s
+        timeout: 0s
 ```
